@@ -11,7 +11,6 @@ class FetchPosts extends Component
 {
     public function render()
     {
-        // Fetch all posts with related user and likes
         $posts = Post::with('user')->with('likes')->latest()->get();
         return view('livewire.fetch-posts', compact('posts'));
     }
@@ -31,15 +30,12 @@ class FetchPosts extends Component
         }
     }
 
-    // Method to delete a post
     public function deletePost($postId)
     {
         $post = Post::find($postId);
 
         if ($post) {
-            // Check if the user is admin or the post belongs to the current user
             if (Auth::user()->role === 'admin' || $post->user_id === auth()->id()) {
-                // Delete the post along with related likes
                 $post->likes()->delete();
                 $post->delete();
                 session()->flash('message', 'Post deleted successfully!');

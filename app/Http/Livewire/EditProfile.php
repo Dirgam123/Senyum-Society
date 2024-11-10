@@ -21,18 +21,15 @@ class EditProfile extends Component
     {
         $user = Auth::user();
 
-        // Validate input fields
         $validatedData = $this->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $user->id,
-            'password' => 'nullable|min:8|confirmed',  // Optional password field with confirmation
+            'password' => 'nullable|min:8|confirmed',
         ]);
 
-        // Update user profile
         $user->name = $this->name;
         $user->email = $this->email;
 
-        // Update password if provided
         if ($this->password) {
             $user->password = Hash::make($this->password);
         }
